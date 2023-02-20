@@ -30,10 +30,8 @@ async function renderArticle() {
   root.append(articleElement);
 
   const commentsData = await getArticleComments(id);
-  console.log(commentsData);
 
   for (const comment of commentsData.data) {
-    console.log(comment);
     const commentElement = document.createElement('div');
     const commentHeading = document.createElement('h3');
     commentHeading.textContent = comment.name;
