@@ -4,6 +4,12 @@ async function getArticle(id) {
   return data;
 }
 
+async function getArticleComments(id) {
+  const response = await fetch(`https://gorest.co.in/public-api/posts/${id}/comments`);
+  const data = response.json();
+  return data;
+}
+
 async function renderArticle() {
   const root = document.querySelector('#root');
   const id = new URLSearchParams(window.location.search).get('id');
@@ -22,6 +28,24 @@ async function renderArticle() {
   articleElement.append(text);
 
   root.append(articleElement);
+
+  const commentsData = await getArticleComments(id);
+  console.log(commentsData);
+
+  for (const comment of commentsData.data) {
+    console.log(comment);
+    const commentElement = document.createElement('div');
+    const commentHeading = document.createElement('h3');
+    commentHeading.textContent = comment.name;
+
+    const commentText = document.createElement('p');
+    commentText.textContent = comment.body;
+
+    commentElement.append(commentHeading);
+    commentElement.append(commentText);
+
+    root.append(commentElement);
+  }
 }
 
 renderArticle();
