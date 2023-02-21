@@ -22,19 +22,26 @@ function renderPagination() {
 async function renderArticles() {
   const page = new URLSearchParams(window.location.search).get('page') || 1;
   const articlesData = await getArticles(page);
+  const articlesList = document.createElement('ul');
+  articlesList.classList.add('articles-list');
   for (const article of articlesData) {
+    const articleLi = document.createElement('li');
+    articleLi.classList.add('article-item');
     const articleLink = document.createElement('a');
     articleLink.href = `post.html?id=${article.id}`;
     const heading = document.createElement('h2');
     heading.classList.add('article-heading');
     const text = document.createElement('p');
+    text.classList.add('article-text');
     articleLink.classList.add('article', 'article-link');
     heading.textContent = article.title;
     text.textContent = article.body;
     articleLink.append(heading);
     articleLink.append(text);
-    root.append(articleLink);
+    articleLi.append(articleLink);
+    articlesList.append(articleLi);
   }
+  root.append(articlesList);
 
   renderPagination();
 }

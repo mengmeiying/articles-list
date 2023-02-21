@@ -17,7 +17,7 @@ async function renderArticle() {
   const articleData = article.data;
 
   const articleElement = document.createElement('div');
-  articleElement.classList.add('article');
+  articleElement.classList.add('article-item', 'article-item--comment');
 
   const heading = document.createElement('h2');
   heading.textContent = articleData.title;
