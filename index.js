@@ -26,6 +26,7 @@ async function renderArticles() {
     const articleLink = document.createElement('a');
     articleLink.href = `post.html?id=${article.id}`;
     const heading = document.createElement('h2');
+    heading.classList.add('article-heading');
     const text = document.createElement('p');
     articleLink.classList.add('article', 'article-link');
     heading.textContent = article.title;

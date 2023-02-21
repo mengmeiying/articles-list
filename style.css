@@ -1,19 +1,20 @@
 body {
   background-color: #e3f6f5;
+  font-family: 'Comfortaa', cursive;
 }
 
 .heading {
-  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 100px;
 }
 
 .article {
-    padding: 10px 20px;
-    border: 2px solid #272643;
-    border-radius: 10px;
-    text-decoration: none;
-    font-family: sans-serif;
-    color: #272643;
-    background-color: #fff;
+  padding: 10px 20px;
+  border: 2px solid #272643;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #272643;
+  background-color: #fff;
 }
 
 .article-link {
@@ -25,10 +26,16 @@ body {
 }
 
 .articles-container {
-    width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    gap: 30px;
+  width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: 30px;
+}
+
+.article-heading {
+  margin: 0;
+  margin-bottom: 20px;
+  font-size: 50px;
 }
 
 .pagination {
