@@ -1,21 +1,50 @@
 async function getArticles(page) {
   const response = await fetch(`https://gorest.co.in/public/v2/posts?page=${page}`);
-  const totalPages = await response.headers.get('X-Pagination-Pages');
+  const pages = await response.headers.get('X-Pagination-Pages');
   const data = await response.json();
-  return await { data, totalPages };
+  return { data, pages };
 }
 
 const root = document.querySelector('#root');
 
-function renderPagination(pagesTotal) {
+function renderPagination(pages, currPage) {
+  const pagesTotal = Number(pages);
+  const page = Number(currPage);
   const pagination = document.createElement('div');
   pagination.classList.add('pagination');
-  for (let i = 1; i <= pagesTotal; i++) {
+
+  function createPageLink(text, href) {
     const pageLink = document.createElement('a');
-    pageLink.href = `index.html?page=${i}`;
-    pageLink.textContent = `${i}`;
+    pageLink.href = `index.html?page=${href}`;
+    pageLink.textContent = text;
     pageLink.classList.add('page-link');
-    pagination.append(pageLink);
+    if (Number(text) === page) {
+      pageLink.classList.add('page-link--active');
+    }
+    return pageLink;
+  }
+
+  if (page > 1) {
+    pagination.append(createPageLink('<', page - 1));
+    pagination.append(createPageLink('1', 1));
+  }
+
+  if (page < pagesTotal - 3) {
+    for (let i = page; i <= page + 3; i++) {
+      pagination.append(createPageLink(i, i));
+    }
+  }
+
+  pagination.append(createPageLink('...', '#'));
+
+  if (page >= pagesTotal - 3) {
+    for (let i = pagesTotal - 3; i < pagesTotal; i++) {
+      pagination.append(createPageLink(i, i));
+    }
+  }
+  pagination.append(createPageLink(`${pagesTotal}`, pagesTotal));
+  if (page < pagesTotal) {
+    pagination.append(createPageLink('>', page + 1));
   }
   root.append(pagination);
 }
@@ -24,7 +53,7 @@ async function renderArticles() {
   const page = new URLSearchParams(window.location.search).get('page') || 1;
   const responseData = await getArticles(page);
   const articlesData = responseData.data;
-  const totalPages = responseData.totalPages;
+  const totalPages = responseData.pages;
   const articlesList = document.createElement('ul');
   articlesList.classList.add('articles-list');
   for (const article of articlesData) {
@@ -46,7 +75,7 @@ async function renderArticles() {
   }
   root.append(articlesList);
 
-  renderPagination(totalPages);
+  renderPagination(totalPages, page);
 }
 
 renderArticles();
