@@ -1,18 +1,19 @@
 async function getArticles(page) {
   const response = await fetch(`https://gorest.co.in/public/v2/posts?page=${page}`);
-  const data = response.json();
-  return data;
+  const totalPages = await response.headers.get('X-Pagination-Pages');
+  const data = await response.json();
+  return await { data, totalPages };
 }
 
 const root = document.querySelector('#root');
 
-function renderPagination() {
+function renderPagination(pagesTotal) {
   const pagination = document.createElement('div');
   pagination.classList.add('pagination');
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= pagesTotal; i++) {
     const pageLink = document.createElement('a');
     pageLink.href = `index.html?page=${i}`;
-    pageLink.textContent = `page ${i}`;
+    pageLink.textContent = `${i}`;
     pageLink.classList.add('page-link');
     pagination.append(pageLink);
   }
@@ -21,7 +22,9 @@ function renderPagination() {
 
 async function renderArticles() {
   const page = new URLSearchParams(window.location.search).get('page') || 1;
-  const articlesData = await getArticles(page);
+  const responseData = await getArticles(page);
+  const articlesData = responseData.data;
+  const totalPages = responseData.totalPages;
   const articlesList = document.createElement('ul');
   articlesList.classList.add('articles-list');
   for (const article of articlesData) {
@@ -43,7 +46,7 @@ async function renderArticles() {
   }
   root.append(articlesList);
 
-  renderPagination();
+  renderPagination(totalPages);
 }
 
 renderArticles();
